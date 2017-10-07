@@ -1,0 +1,13 @@
+[local]
+# gandi.net API (Production) key
+apikey = <CHANGE ME>
+# Domain
+domain = <CHANGE ME>
+# A-record name
+a_name = @
+# TTL (seconds = 5 mintes to 30 days)
+ttl = 900
+# Production API
+api = https://rpc.gandi.net/xmlrpc/
+# Host which IP should be changed
+host = localhost
