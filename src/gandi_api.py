@@ -43,6 +43,16 @@ class GandiHandler:
     def get_record_href(self, record_name, record_type, domain):
         return self._get_record_info('rrset_href', record_name, record_type, domain)
 
+    def is_ip_up_to_date(self, new_ip, record_href):
+        request_headers = {
+            "X-Api-Key": self.api_key
+        }
+
+        http_response = requests.get(record_href, headers=request_headers)
+        record_info = http_response.json()
+        return record_info['rrset_values'][0] == new_ip
+        
+
     def change_zone_a_record(self, new_ip, record_name, ttl, domain):
         request_headers = {
             "Content-Type": "application/json",
@@ -57,11 +67,14 @@ class GandiHandler:
         }
 
         record_href = self.get_record_href(record_name, "A", domain) 
-        print("Recording new IP(" + new_ip + ") for " + record_name + ".")
-        print("URL: " + record_href)
+        if not self.is_ip_up_to_date(new_ip, record_href):
+            print("Recording new IP(" + new_ip + ") for " + record_name + ".")
+            print("URL: " + record_href)
 
-        http_response = requests.put(record_href,
-            headers=request_headers, data=str(request_data).replace("'",'"'))
+            http_response = requests.put(record_href,
+                headers=request_headers, data=str(request_data).replace("'",'"'))
 
-        print("Request response status: " + str(http_response.status_code))
-        print("Request text: " + http_response.text)
+            print("Request response status: " + str(http_response.status_code))
+            print("Request text: " + http_response.text)
+        else:
+            print("External IP is up to date")
