@@ -2,13 +2,13 @@ import sys
 import os
 import requests
 import socket
-import ConfigParser as configparser
+import configparser
 from gandi_api import GandiHandler
 
 # name of the configuration file.
 # If the full path is not given, gandi-ddns.py will check for this file in
 # its current directory
-config_file = "config.txt"
+config_file = "../config.txt"
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -27,7 +27,7 @@ def get_ip():
 def change_zone_ip(config, section, new_ip):
     """ Change the zone record to the new IP """
 
-    api = config.get_api(section, "api")
+    api = config.get(section, "api")
     a_name = config.get(section, "a_name")
     apikey = config.get(section, "apikey")
     ttl = int(config.get(section, "ttl"))
