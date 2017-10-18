@@ -14,6 +14,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 
 def get_ip():
     """ Get external IP """
+    print("Getting external IP")
 
     try:
         # Could be any service that just gives us a simple raw ASCII IP address (not HTML etc)
@@ -22,10 +23,13 @@ def get_ip():
     except Exception:
         sys.exit('Unable to external IP address.')
 
+    print("Found IP: " + str(external_ip))
+
     return external_ip
 
 def change_zone_ip(config, section, new_ip):
     """ Change the zone record to the new IP """
+    print("Change zone function for IP: " + str(new_ip))
 
     api = config.get(section, "api")
     a_name = config.get(section, "a_name")
@@ -39,6 +43,7 @@ def change_zone_ip(config, section, new_ip):
 
 def read_config(config_path):
     """ Open the configuration file or create it if it doesn't exists """
+    print("Reading config file: " + config_path)
 
     cfg = configparser.ConfigParser()
     cfg.read(config_path)
@@ -58,6 +63,7 @@ def main():
         sys.exit(err)
 
     for section in config.sections():
+        print("Changing zone for " + section + " section")
         current_ip = socket.gethostbyname(config.get(section, "host"))
         if current_ip == '127.0.0.1':
             current_ip = get_ip()
